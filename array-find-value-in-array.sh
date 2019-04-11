@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Looks for value in array.
-# param1 = value_to_find
-# param2 = array to search within
+# $1 = value_to_find
+# $2 = array to search within
 # @return 1 if value is contained in array, otherwise 0
 findValueInArray() {
 	local value_to_find="$1"

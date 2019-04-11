@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Counts up/dow according to paramters.
-# param1 = start number
-# param2 = end number
-# param3 = step number
+# $1 = start number
+# $2 = end number
+# $3 = step number
 # @return echo countdown sequense
 counter() {
 		start=$1
