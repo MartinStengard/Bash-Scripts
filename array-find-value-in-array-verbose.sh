@@ -15,8 +15,8 @@ findValueInArray () {
 	echo "  Values in array -> $@"
 	echo "  Loop values in array"
 
-	for array_value; 
-	do 
+	for array_value;
+	do
 		if [[ "$array_value" == "$value_to_find" ]]; then
 			echo "    MATCH -> $value_to_find found in array"
 			echo "    return 1"
