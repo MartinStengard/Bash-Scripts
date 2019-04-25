@@ -24,16 +24,16 @@ args=()
 
 # Replace long arguments into short version
 for arg; do
-    case "$arg" in
-        --help)
+	case "$arg" in
+		--help)
 			args+=( -h ) ;;
-        --longa)
+		--longa)
 			args+=( -a ) ;;
-        --longb)
+		--longb)
 			args+=( -b ) ;;
-        *)
+		*)
 			args+=( "$arg" ) ;;
-    esac
+	esac
 done
 
 # Print arguments before and after transformation to see change.
@@ -47,7 +47,7 @@ VARIABLE_A=$VARIABLE_NOT_SET
 VARIABLE_B=$VARIABLE_NOT_SET
 
 while getopts ":ha:b:" OPTION; do
-    case $OPTION in
+	case $OPTION in
 		h)
 			usage
 			exit 0 ;;
@@ -64,7 +64,7 @@ while getopts ":ha:b:" OPTION; do
 		?)
 			echo "Invalid option argument: -$OPTARG"
 			exit 1 ;;
-    esac
+	esac
 done
 
 # Check arguments.

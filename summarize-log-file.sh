@@ -1,15 +1,20 @@
 #!/bin/bash
 
 # Format of line to process:
+# Script will parse each line, extract predefined values
+# and format. Produces a file or print in terminal summarized
+# findings.
 # ---------------------------------------------------------
 # Date [tab] Text
-# 2019-04-10 12:20:54.857	Line text to search for. Text one to extract 34798876, Text two to extract 420014 rest of log text.
+# 2019-04-10 12:20:54	Line text to search for. Text one to extract 34798876, Text two to extract 420014 rest of log text.
+# 2019-04-10 12:17:54	Line text to search for. Text one to extract 8700000, Text two to extract 850001 rest of log text.
+# 2019-04-10 12:20:54	Line text to search for. Text one to extract 34798876, Text two to extract 420014 rest of log text.
+# 2019-04-10 12:20:54	Line text to search for. Text one to extract 34798876, Text two to extract 420014 rest of log text.
 # ---------------------------------------------------------
 
 usage() {
 	echo "Usage"
 	echo "---------------------------------------------------"
-	echo "-i	input file name (required)"
 	echo "-i	input file name (required)"
 	echo "[-o]	output file name"
 	echo "---------------------------------------------------"
@@ -65,7 +70,6 @@ while getopts i:o: option
 do
 case "${option}" in
 	i) current_file=${OPTARG};;
-	-i) echo ${OPTARG};;
 	o) out_file=${OPTARG};;
 esac
 done
@@ -93,15 +97,16 @@ out "[+] Filtering on lines containing string \"$find_string\" in input file."
 out
 
 # Loop each line in file that contains string to find ( < "$current_file")
-while read line; do
-  if [[ "$line" == *"$find_string"* ]]; then
+while read p; do
+
+  if [[ "$p" == *"$find_string"* ]]; then
 		let row_count+=1
 
 		# Get date before first tab.
-		field_date=$(echo "$line" | cut -f1)
+		field_date=$(echo "$p" | cut -f1)
 
 		# Get string after first tab.
-		field_content=$(echo "$line" | cut -f2)
+		field_content=$(echo "$p" | cut -f2)
 
 		# Get revenue from field_content.
 		revenue=$(echo "$field_content" | sed "s/.*revenue\(.*\)for.*/\1/" | tr -d "[:space:]" | sed ":a;s/\B[0-9]\{3\}\>/ &/;ta")
@@ -121,10 +126,12 @@ while read line; do
 			tenants+=("$tenant")
 			out "$field_date >    Revenue: $revenue,  Tenant: $tenant"
 		fi
-  fi
+	fi
 done < "$current_file"
 
 echo "[+] DONE"
+echo
+
 out "[+] ${#tenants[@]} unique tenants found in $row_count lines." 3
 
 exit 0
