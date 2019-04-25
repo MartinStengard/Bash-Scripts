@@ -10,6 +10,7 @@ usage() {
 	echo "Usage"
 	echo "---------------------------------------------------"
 	echo "-i	input file name (required)"
+	echo "-i	input file name (required)"
 	echo "[-o]	output file name"
 	echo "---------------------------------------------------"
 	echo ""
@@ -64,6 +65,7 @@ while getopts i:o: option
 do
 case "${option}" in
 	i) current_file=${OPTARG};;
+	-i) echo ${OPTARG};;
 	o) out_file=${OPTARG};;
 esac
 done
@@ -92,41 +94,37 @@ out
 
 # Loop each line in file that contains string to find ( < "$current_file")
 while read line; do
-
   if [[ "$line" == *"$find_string"* ]]; then
-	let row_count+=1
+		let row_count+=1
 
-	# Get date before first tab.
-	field_date=$(echo "$line" | cut -f1)
+		# Get date before first tab.
+		field_date=$(echo "$line" | cut -f1)
 
-	# Get string after first tab.
-	field_content=$(echo "$line" | cut -f2)
+		# Get string after first tab.
+		field_content=$(echo "$line" | cut -f2)
 
-	# Get revenue from field_content.
-	revenue=$(echo "$field_content" | sed "s/.*revenue\(.*\)for.*/\1/" | tr -d "[:space:]" | sed ":a;s/\B[0-9]\{3\}\>/ &/;ta")
-	revenue=$(printf "%11s" "$revenue")
+		# Get revenue from field_content.
+		revenue=$(echo "$field_content" | sed "s/.*revenue\(.*\)for.*/\1/" | tr -d "[:space:]" | sed ":a;s/\B[0-9]\{3\}\>/ &/;ta")
+		revenue=$(printf "%11s" "$revenue")
 
-	# Get tenantId (string between 'tenant:' and ',').
-	tenant=$(echo "$field_content" | sed "s/.*tenant:\(.*\),.*/\1/" | tr -d "[:space:]")
-	tenant=$(printf "%7s" "$tenant")
+		# Get tenantId (string between 'tenant:' and ',').
+		tenant=$(echo "$field_content" | sed "s/.*tenant:\(.*\),.*/\1/" | tr -d "[:space:]")
+		tenant=$(printf "%7s" "$tenant")
 
-	# Find tenant in collection.
-	findTenantInCollection "$tenant"
-	tenant_found=$?
+		# Find tenant in collection.
+		findTenantInCollection "$tenant"
+		tenant_found=$?
 
-	# Add if tenant has not been added.
-	if [[ tenant_found -eq 0 ]]; then
-		# Add current tenant to collection.
-		tenants+=("$tenant")
-		out "$field_date >    Revenue: $revenue,  Tenant: $tenant"
-	fi
-
+		# Add if tenant has not been added.
+		if [[ tenant_found -eq 0 ]]; then
+			# Add current tenant to collection.
+			tenants+=("$tenant")
+			out "$field_date >    Revenue: $revenue,  Tenant: $tenant"
+		fi
   fi
 done < "$current_file"
 
 echo "[+] DONE"
-echo
-
 out "[+] ${#tenants[@]} unique tenants found in $row_count lines." 3
 
 exit 0
