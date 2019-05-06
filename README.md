@@ -10,9 +10,13 @@ types of scenarios
 ### array-find-value-in-array-verbose.sh
 Same script as above but contains comments and vervose code.
 
-## getops
+## Getops
 ### getoptions-long.sh
 Script shows an easy way of handling both long and short option arguments without using `eval`.
+
+## Grep
+### grep-logfile/grep-logfile-with-file-list-values.sh
+Loop values from file and grep (exact word and count number of matches) against log file.
 
 ## Misc
 ### counter.sh
