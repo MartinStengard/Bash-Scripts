@@ -57,7 +57,7 @@ out_file=""
 append_to_file="0"
 
 # String to find.
-find_string="No offer due to high company revenue"
+find_string="Line text to search for"
 
 # Line count in file.
 row_count=0
@@ -108,12 +108,12 @@ while read p; do
 		# Get string after first tab.
 		field_content=$(echo "$p" | cut -f2)
 
-		# Get revenue from field_content.
-		revenue=$(echo "$field_content" | sed "s/.*revenue\(.*\)for.*/\1/" | tr -d "[:space:]" | sed ":a;s/\B[0-9]\{3\}\>/ &/;ta")
+		# Get value between "text-one-start" and "text-one-end".
+		revenue=$(echo "$field_content" | sed "s/.*text-one-start\(.*\)text-one-end.*/\1/" | tr -d "[:space:]" | sed ":a;s/\B[0-9]\{3\}\>/ &/;ta")
 		revenue=$(printf "%11s" "$revenue")
 
-		# Get tenantId (string between 'tenant:' and ',').
-		tenant=$(echo "$field_content" | sed "s/.*tenant:\(.*\),.*/\1/" | tr -d "[:space:]")
+		# Get id between "text-two-start" and "text-two-end".
+		tenant=$(echo "$field_content" | sed "s/.*text-two-start:\(.*\)text-two-end.*/\1/" | tr -d "[:space:]")
 		tenant=$(printf "%7s" "$tenant")
 
 		# Find tenant in collection.
